@@ -16,7 +16,7 @@ dependencies requirements.txt leaves open pinned.
 
 ```bash
 isoloom generate
-isoloom up docker
+isoloom run docker
 ```
 
 Then open http://localhost:8030/. The Scenarios page lists the exercises; the Token Manager page
