@@ -1,0 +1,152 @@
+{
+  "generated_by_isoloom": "from isoloom.yml; don't edit: change the spec and run `isoloom generate` (`isoloom check` fails when this file is out of date)",
+  "resolved_version": 1,
+  "name": "tiredful-api",
+  "instance": null,
+  "inputs": [],
+  "networks": {
+    "lab": {
+      "cidr": "10.60.30.0/24",
+      "docker_cidr": "10.60.30.0/24",
+      "internet": false,
+      "gateway": null,
+      "gateway_address": "10.60.30.1",
+      "router": null,
+      "controller": "10.60.30.253"
+    }
+  },
+  "reach": [],
+  "machines": {
+    "web": {
+      "access": false,
+      "supplied": false,
+      "shapes": [
+        "docker"
+      ],
+      "arch": "amd64",
+      "os": null,
+      "windows": false,
+      "addresses": {
+        "lab": "10.60.30.10"
+      },
+      "docker_addresses": {
+        "lab": "10.60.30.10"
+      },
+      "services": [
+        {
+          "port": 8000,
+          "name": "web",
+          "http": true,
+          "publish": 8030
+        }
+      ],
+      "depends_on": [],
+      "inputs": [],
+      "volumes": {},
+      "resources": {
+        "cpus": 1,
+        "memory_mb": 512,
+        "disk_gb": 20
+      },
+      "gateway_of": [],
+      "routes": [],
+      "default_gateway": null,
+      "offline": true
+    }
+  },
+  "start_order": [
+    "web"
+  ],
+  "clones": {},
+  "tools": {},
+  "groups": {},
+  "router": null,
+  "controller": {
+    "addresses": {
+      "lab": "10.60.30.253"
+    }
+  },
+  "published": [
+    {
+      "machine": "web",
+      "port": 8000,
+      "host_port": 8030
+    }
+  ],
+  "targets": {
+    "possible": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "generated": [
+      "docker",
+      "hosted",
+      "docker-vm",
+      "cloud-docker",
+      "kubernetes"
+    ],
+    "refused": {},
+    "not_possible": {
+      "hybrid": "only when some machines are containers and others are VMs",
+      "vagrant": "needs `vm:` on web",
+      "proxmox": "needs `vm:` on web",
+      "cloud-vm": "needs `vm:` on web",
+      "external": "needs `external:` on web"
+    }
+  },
+  "checks": {
+    "default_position": "networks",
+    "positions": [
+      {
+        "position": "networks",
+        "machine": null,
+        "runner": "isoloom-check",
+        "checks": [
+          {
+            "name": "Tiredful API answers",
+            "derived": false,
+            "kind": "http",
+            "target": "http://web:8000/",
+            "expect": "200",
+            "wait": 180
+          },
+          {
+            "name": "the library API returns a book",
+            "derived": false,
+            "kind": "http",
+            "target": "http://web:8000/api/v1/books/978-93-80658-74-2/",
+            "expect": "200",
+            "wait": 30
+          },
+          {
+            "name": "batman gets an OAuth token",
+            "derived": false,
+            "kind": "script",
+            "target": "checks/token.sh",
+            "expect": "",
+            "wait": 0
+          }
+        ]
+      },
+      {
+        "position": "web",
+        "machine": "web",
+        "runner": "isoloom-check-web",
+        "checks": [
+          {
+            "name": "no internet from web",
+            "derived": true,
+            "kind": "http",
+            "target": "http://1.1.1.1/",
+            "expect": "blocked",
+            "wait": 0
+          }
+        ]
+      }
+    ]
+  },
+  "message": "Tiredful API answers at http://localhost:8030/. The Scenarios\npage lists each exercise; the Token Manager gives the users (batman / Batman@123, superman /\nSuperman@123) and how to get a bearer token for the API under /api/v1/.\n"
+}

@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://www.isoloom.com/schema/v1.json
+# Tiredful API (by Payatu) as an Isoloom spec: the upstream Django REST source, vendored
+# unchanged in build/web/app/, built by its Dockerfile with the open dependencies pinned.
+# `isoloom generate`, then `isoloom up docker`.
+version: 1
+name: tiredful-api
+
+networks:
+  lab: { cidr: 10.60.30.0/24, internet: false }
+
+machines:
+  web:
+    networks: { lab: 10 }
+    services: [{ port: 8000, name: web, http: true, publish: 8030 }]
+    resources: { cpus: 1, memory_mb: 512 }
+    docker:
+      build: build/web
+
+checks:
+  - name: Tiredful API answers
+    http: http://web:8000/
+    wait: 180
+  - name: the library API returns a book
+    http: http://web:8000/api/v1/books/978-93-80658-74-2/
+  - name: batman gets an OAuth token
+    script: checks/token.sh
+
+message: |
+  Tiredful API answers at http://localhost:{{ machines.web.services.0.publish }}/. The Scenarios
+  page lists each exercise; the Token Manager gives the users (batman / Batman@123, superman /
+  Superman@123) and how to get a bearer token for the API under /api/v1/.

@@ -1,0 +1,9 @@
+{
+  "title": "Tiredful API",
+  "description": "Tiredful API: an intentionally broken Django REST API (library, exams, blog, trains, health, advertisements) with information disclosure, IDOR, access control, throttling, SQL injection and XSS scenarios, protected by OAuth bearer tokens.",
+  "question": "Solve each Tiredful API scenario listed on its Scenarios page.",
+  "category": "WEB",
+  "difficulty": 2,
+  "evidence_kind": "SECRET",
+  "capabilities": ["rest-api-testing", "idor", "broken-access-control", "sql-injection", "cross-site-scripting", "information-disclosure"]
+}
